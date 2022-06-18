@@ -2,7 +2,7 @@ const wasm = require("./pkg/rust_scf_facefinder");
 
 exports.main_handler = async (event, context, callback) => {
   var body = event['body']
-  var finder_result = wasm.process_event(JSON.stringify(body));
+  var finder_result = wasm.process_event(body);
 
   return {
     isBase64Encoded: false,
@@ -11,3 +11,4 @@ exports.main_handler = async (event, context, callback) => {
     body: finder_result,
   }
 }
+

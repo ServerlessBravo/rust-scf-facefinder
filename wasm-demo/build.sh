@@ -5,8 +5,11 @@
 #sudo apt install pkgconf
 #sudo apt install openssl libssl-dev -y
 
+# install wasm-pack
+# curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
+
 rm -rf pkg
-rm pkg.zip
+rm -rf pkg.zip
 
 wasm-pack build --target nodejs --release
 zip -r pkg.zip index.js pkg  -x "*.git*"

@@ -1,56 +1,46 @@
-# Rust and WebAssembly Demo for SCF
-
+# rust-scf-facefinder
+腾讯云函数SCF Nodejs + Wasm 部署Rust人脸检测
 
 ![](https://user-images.githubusercontent.com/251222/174422986-2cb455ad-1d69-4c87-b8c9-8b48a9bcc7b5.png)
 
 
-### Rust Demo
-
-
-```bash
-## 静态链接编译
-RUSTFLAGS='-C target-feature=+crt-static' cargo build --target=x86_64-unknown-linux-gnu --release
-## 复制编译好的文件
-cp target/x86_64-unknown-linux-gnu/release/scf-server pkg/bootstrap
-cd pkg
-## 给文件添加执行权限
-chmod 755 ./bootstrap
-## 打包zip
-zip pkg.zip bootstrap
-```
-
-通过 `Custom Runtime` 执行 [bootstrap](https://github.com/ServerlessBravo/rust-scf-facefinder/blob/main/rust-demo/src/main.rs)
-
-
-### Wasm Demo
+### 打包编译
 
 
 
 ```bash
-
+## install wasm-pack
 curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
-wasm-pack build --target nodejs --release
-zip -r pkg.zip index.js pkg  -x "*.git*"
+
+## build as wasm
+./build.sh
 
 ```
 
-通过 `Nodejs Runtime` 执行：
+构建产物为 `pkg.zip`
 
-```js
-const wasm = require("./pkg/rust_scf_facefinder");
+### 部署
 
-exports.main_handler = async (event, context, callback) => {
-  var body = event['body']
-  var finder_result = wasm.process_event(body);
+#### 函数配置
 
-  return {
-    isBase64Encoded: false,
-    statusCode: 200,
-    headers: { 'Content-Type': 'application/json' },
-    body: finder_result,
-  }
-}
+```bash
+函数类型	Event函数
+运行环境	Nodejs 16.13
+内存	512MB
+初始化超时时间	65秒
+执行超时时间	10秒
 
+```
+
+#### 触发器配置
+
+```bash
+鉴权方式	免鉴权
+启用集成响应	已启用
+启用Base64编码	未启用
+支持CORS	是
+后端超时	15s
+公网访问路径  https://service-xxx.gz.apigw.tencentcs.com/release/facefinder_wasm_demo
 ```
 
 ### *测试*
@@ -91,3 +81,5 @@ exports.main_handler = async (event, context, callback) => {
 ### *引用*
 
 - 参考链接：[在腾讯云上部署一个Rust人脸检测云函数](https://zhuanlan.zhihu.com/p/476715251)
+- 参考链接：[在函数计算FunctionCompute中使用WebAssembly](https://developer.aliyun.com/article/713613)
+

@@ -1,11 +1,39 @@
-# Rust and WebAssembly Demo for SCF
-
+# rust-scf-facefinder
+腾讯云函数SCF Custom Runtime部署Rust人脸检测
 
 ![](https://user-images.githubusercontent.com/251222/174422986-2cb455ad-1d69-4c87-b8c9-8b48a9bcc7b5.png)
 
+```JavaScript
+var data = {
+    img: base64,
+    min_size: 60,
+    shift_factor: 0.1,
+    threshold: 0.2
+};
 
-### Rust Demo
+fetch(url,{
+    method: 'POST',
+    body: JSON.stringify(data),
+    headers: getHeader()
+}).then(res => {
+    res.json().then(faces => {
+        ctx.strokeStyle="blue";
+        ctx.lineWidth = 2;
+        faces.forEach(face => {
+            ctx.strokeRect(face.rect.left, face.rect.top, face.rect.width, face.rect.height);
+        });
+    });
+})
+```
 
+### *如何编译*
+
+Windows环境下，需要在Linux子系统编译，编译脚本如下：
+
+```PowerShell
+## 在windows控制台输入bash，进入linux子系统
+bash
+```
 
 ```bash
 ## 静态链接编译
@@ -19,39 +47,10 @@ chmod 755 ./bootstrap
 zip pkg.zip bootstrap
 ```
 
-通过 `Custom Runtime` 执行 [bootstrap](https://github.com/ServerlessBravo/rust-scf-facefinder/blob/main/rust-demo/src/main.rs)
+### *云函数上传和部署*
 
+进入腾讯Serverless控制台的云函数管理，在函数代码中，选择“本地上传zip包”，上传并部署。
 
-### Wasm Demo
-
-
-
-```bash
-
-curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
-wasm-pack build --target nodejs --release
-zip -r pkg.zip index.js pkg  -x "*.git*"
-
-```
-
-通过 `Nodejs Runtime` 执行：
-
-```js
-const wasm = require("./pkg/rust_scf_facefinder");
-
-exports.main_handler = async (event, context, callback) => {
-  var body = event['body']
-  var finder_result = wasm.process_event(body);
-
-  return {
-    isBase64Encoded: false,
-    statusCode: 200,
-    headers: { 'Content-Type': 'application/json' },
-    body: finder_result,
-  }
-}
-
-```
 
 ### *测试*
 
