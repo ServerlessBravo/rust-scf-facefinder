@@ -1,7 +1,7 @@
 # rust-scf-facefinder
 腾讯云函数SCF Custom Runtime部署Rust人脸检测
 
-<img src="test.png" />
+![](https://user-images.githubusercontent.com/251222/174422986-2cb455ad-1d69-4c87-b8c9-8b48a9bcc7b5.png)
 
 ```JavaScript
 var data = {
@@ -56,25 +56,25 @@ zip pkg.zip bootstrap
 
 - 修改测试 html 文件中的远程API的地址信息
 
-idnex.html#L87
+  index.html#L87
 
-```js
+    ```js
 
-# 替换地址为 APIGW 触发器地址
+    # 替换地址为 APIGW 触发器地址
 
-const url = "https://service-xxxx.gz.apigw.tencentcs.com/release/rust-facedector-demo";
-                                                                                        
-img.onload = function () {
-  console.log('img=', img);
-  canvas.width = img.width;
-  canvas.height = img.height;
-  canvas.style.width = img.width + 'px';
-  canvas.style.height = img.height + 'px';
-  ctx.drawImage(img, 0, 0);
-};
-img.src = "faces.png"
+    const url = "https://service-xxxx.gz.apigw.tencentcs.com/release/rust-facedector-demo";
 
-```
+    img.onload = function () {
+      console.log('img=', img);
+      canvas.width = img.width;
+      canvas.height = img.height;
+      canvas.style.width = img.width + 'px';
+      canvas.style.height = img.height + 'px';
+      ctx.drawImage(img, 0, 0);
+    };
+    img.src = "faces.png"
+
+    ```
 - 打开本地的 test 目录 `index.html` 文件
 - 选择 png 文件，目录 `test/pngs` 有部分样本文件
 - 点击 按钮进行人脸监测
