@@ -40,7 +40,7 @@ async fn process_event(response: Response) -> Result<()> {
 
     // 网关api数据存储在body字段中
     let body_str = event["body"].as_str().unwrap_or("");
-    if body_str.len() > 0{
+    if !body_str.is_empty(){
         if let Ok(e) = serde_json::from_str(body_str){
             event = e;
         }

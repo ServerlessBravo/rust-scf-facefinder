@@ -2,7 +2,7 @@ use std::env;
 
 use once_cell::sync::Lazy;
 
-pub static CONFIG: Lazy<Config> = Lazy::new(|| Config::default());
+pub static CONFIG: Lazy<Config> = Lazy::new(Config::default);
 
 /// 从环境变量中读取SCF配置
 #[derive(Debug)]
@@ -18,9 +18,9 @@ pub struct Config {
 
 impl Default for Config {
     fn default() -> Self {
-        let scf_host = env::var("SCF_RUNTIME_API").unwrap_or(String::new());
-        let scf_port = env::var("SCF_RUNTIME_API_PORT").unwrap_or(String::new());
-        let func_name = env::var("_HANDLER").unwrap_or(String::new());
+        let scf_host = env::var("SCF_RUNTIME_API").unwrap_or_default();
+        let scf_port = env::var("SCF_RUNTIME_API_PORT").unwrap_or_default();
+        let func_name = env::var("_HANDLER").unwrap_or_default();
 
         Self {
             ready_url: format!("http://{scf_host}:{scf_port}/runtime/init/ready"),
