@@ -11,7 +11,7 @@ pub fn process_event(body_str: String) -> String {
     info!("获取到 body_str:{body_str}");
 
     let mut event: Value = Value::default();
-    if body_str.len() > 0 {
+    if !body_str.is_empty() {
         if let Ok(e) = serde_json::from_str(&body_str) {
             event = e;
         }
